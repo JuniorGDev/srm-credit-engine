@@ -23,4 +23,15 @@ public class Currency {
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Currency(String name, String code) {
+        update(name, code);
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public void update(String name, String code) {
+        this.name = name;
+        this.code = code.trim().toUpperCase();
+        this.updatedAt = LocalDateTime.now();
+    }
 }
