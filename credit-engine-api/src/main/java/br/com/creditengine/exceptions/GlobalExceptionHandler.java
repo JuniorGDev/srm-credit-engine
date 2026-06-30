@@ -12,6 +12,17 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private ProblemDetail createProblemDetail(
+            HttpStatus status,
+            String title,
+            String detail
+    ) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
+        problemDetail.setTitle(title);
+        problemDetail.setDetail(detail);
+        return problemDetail;
+    }
+
     @ExceptionHandler(CurrencyAlreadyExistsException.class)
     public ResponseEntity<ProblemDetail> handleCurrencyAlreadyExistsException(Exception e) {
         ProblemDetail problemDetail = createProblemDetail(HttpStatus.CONFLICT, "Currency already exists", e.getMessage());
@@ -40,14 +51,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(problem);
     }
 
-    private ProblemDetail createProblemDetail(
-            HttpStatus status,
-            String title,
-            String detail
-    ) {
-        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
-        problemDetail.setTitle(title);
-        problemDetail.setDetail(detail);
-        return problemDetail;
+    @ExceptionHandler(ExchangeRateAlreadyException.class)
+    public ResponseEntity<ProblemDetail> handleExchangeRateAlreadyException(Exception e) {
+        ProblemDetail problemDetail = createProblemDetail(HttpStatus.CONFLICT, "Exchange rate already exists", e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
+    }
+
+    @ExceptionHandler(InvalidExchangeRateException.class)
+    public ResponseEntity<ProblemDetail> handleInvalidExchangeRateException(Exception e) {
+        ProblemDetail problemDetail = createProblemDetail(HttpStatus.BAD_REQUEST, "Invalid exchange rate", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
 }
