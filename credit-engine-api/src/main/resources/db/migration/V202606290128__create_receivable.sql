@@ -6,7 +6,7 @@ CREATE TABLE receivable (
     currency_id     BIGINT         NOT NULL,
     receivable_type VARCHAR(60)    NOT NULL,
     created_at      TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP,
+    updated_at      TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_receivable_currency
         FOREIGN KEY (currency_id)

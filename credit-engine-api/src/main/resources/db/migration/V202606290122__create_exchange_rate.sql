@@ -7,7 +7,7 @@ CREATE TABLE exchange_rate (
     rate             DECIMAL(19, 8) NOT NULL,
 
     created_at       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at       TIMESTAMP,
+    updated_at       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_exchange_rate_from_currency
         FOREIGN KEY (from_currency_id)
