@@ -73,7 +73,7 @@ public class ExchangeRateController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ExchangeRateResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<ExchangeRateResponse> findById(@Positive @PathVariable Long id) {
         return ResponseEntity.ok(exchangeRateService.findById(id));
     }
 
