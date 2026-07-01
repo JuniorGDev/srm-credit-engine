@@ -3,6 +3,7 @@ package br.com.creditengine.dtos.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
@@ -28,6 +29,7 @@ public record ExchangeRateRequest(
                 example = "5.0"
         )
         @NotNull(message = "Exchange rate is required")
+        @Positive
         BigDecimal rate
 ) {
 }
