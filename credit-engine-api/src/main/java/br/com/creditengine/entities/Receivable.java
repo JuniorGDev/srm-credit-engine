@@ -34,4 +34,20 @@ public class Receivable {
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Receivable(
+            String sellerName,
+            BigDecimal faceValue,
+            LocalDate dueDate,
+            Currency currency,
+            ReceivableType receivableType
+    ) {
+        this.sellerName = sellerName;
+        this.faceValue = faceValue;
+        this.dueDate = dueDate;
+        this.currency = currency;
+        this.receivableType = receivableType;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 }
