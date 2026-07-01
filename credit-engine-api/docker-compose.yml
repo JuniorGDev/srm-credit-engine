@@ -17,6 +17,24 @@ services:
     networks:
       - credit-engine-network
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-credit-engine
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - credit-engine-network
+
 volumes:
   postgres_data:
 
