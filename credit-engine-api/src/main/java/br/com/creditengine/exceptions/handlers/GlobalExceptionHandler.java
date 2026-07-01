@@ -1,5 +1,10 @@
-package br.com.creditengine.exceptions;
+package br.com.creditengine.exceptions.handlers;
 
+import br.com.creditengine.exceptions.CurrencyAlreadyExistsException;
+import br.com.creditengine.exceptions.ExchangeRateAlreadyException;
+import br.com.creditengine.exceptions.InvalidExchangeRateException;
+import br.com.creditengine.exceptions.InvalidSettlementException;
+import br.com.creditengine.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +65,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidExchangeRateException.class)
     public ResponseEntity<ProblemDetail> handleInvalidExchangeRateException(Exception e) {
         ProblemDetail problemDetail = createProblemDetail(HttpStatus.BAD_REQUEST, "Invalid exchange rate", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+
+    @ExceptionHandler(InvalidSettlementException.class)
+    public ResponseEntity<ProblemDetail> handleInvalidSettlementException(Exception e) {
+        ProblemDetail problemDetail = createProblemDetail(HttpStatus.BAD_REQUEST, "Invalid settlement", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
 }
