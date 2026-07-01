@@ -15,14 +15,14 @@ public record ExchangeRateRequest(
                 example = "USD"
         )
         @NotBlank(message = "From currency code is required")
-        @Size(min = 3, max = 3)
+        @Size(min = 3, max = 3, message = "From currency code must contain exactly 3 characters")
         String fromCurrency,
         @Schema(
                 description = "To currency code",
                 example = "BRL"
         )
         @NotBlank(message = "To currency code is required")
-        @Size(min = 3, max = 3)
+        @Size(min = 3, max = 3, message = "To currency code must contain exactly 3 characters")
         String toCurrency,
         @Schema(
                 description = "Exchange rate",

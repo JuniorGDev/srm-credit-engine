@@ -20,7 +20,7 @@ public record CurrencyRequest(
                 example = "BRL"
         )
         @NotBlank(message = "Code is required")
-        @Size(min = 3, max = 3)
+        @Size(min = 3, max = 3, message = "Code must contain exactly 3 characters")
         String code
 ) {
 }

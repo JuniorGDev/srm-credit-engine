@@ -37,14 +37,14 @@ public record SettlementRequest(
                 example = "BRL"
         )
         @NotBlank(message = "Currency code is required")
-        @Size(min = 3, max = 3)
+        @Size(min = 3, max = 3, message = "Currency code must contain exactly 3 characters")
         String currencyCode,
         @Schema(
                 description = "Currency code of the payment",
                 example = "BRL"
         )
         @NotBlank(message = "Payment currency code is required")
-        @Size(min = 3, max = 3)
+        @Size(min = 3, max = 3, message = "Payment currency code must contain exactly 3 characters")
         String paymentCurrencyCode,
         @Schema(
                 description = "Type of the receivable",
