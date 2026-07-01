@@ -65,7 +65,7 @@ public class ExchangeRateService {
     }
 
     private void validateDifferentCurrencies(String fromCurrency, String toCurrency) {
-        if (fromCurrency.equals(toCurrency)) {
+        if (fromCurrency.equalsIgnoreCase(toCurrency)) {
             throw new InvalidExchangeRateException();
         }
     }
