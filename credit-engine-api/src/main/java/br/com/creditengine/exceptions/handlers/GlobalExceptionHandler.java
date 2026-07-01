@@ -5,14 +5,19 @@ import br.com.creditengine.exceptions.ExchangeRateAlreadyException;
 import br.com.creditengine.exceptions.InvalidExchangeRateException;
 import br.com.creditengine.exceptions.InvalidSettlementException;
 import br.com.creditengine.exceptions.ResourceNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.ServletWebRequest;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -47,7 +52,15 @@ public class GlobalExceptionHandler {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        FieldError::getDefaultMessage,
+                        (first, second) -> first,
+                        LinkedHashMap::new
+                ))
+                .entrySet()
+                .stream()
+                .map(entry -> entry.getKey() + ": " + entry.getValue())
                 .toList();
 
         ProblemDetail problem = createProblemDetail(HttpStatus.BAD_REQUEST, "Validation failed", "Invalid request fields");
@@ -72,5 +85,29 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleInvalidSettlementException(Exception e) {
         ProblemDetail problemDetail = createProblemDetail(HttpStatus.BAD_REQUEST, "Invalid settlement", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ProblemDetail> handleConstraintViolationException(
+            ConstraintViolationException ex,
+            ServletWebRequest request
+    ) {
+        List<String> errors = ex.getConstraintViolations()
+                .stream()
+                .map(error -> error.getPropertyPath() + ": " + error.getMessage())
+                .toList();
+
+        ProblemDetail problem = createProblemDetail(
+                HttpStatus.BAD_REQUEST,
+                "Validation failed",
+                "Invalid request fields"
+        );
+
+        problem.setProperty("errors", errors);
+        problem.setInstance(request.getRequest().getRequestURI() != null
+                ? java.net.URI.create(request.getRequest().getRequestURI())
+                : null);
+
+        return ResponseEntity.badRequest().body(problem);
     }
 }
