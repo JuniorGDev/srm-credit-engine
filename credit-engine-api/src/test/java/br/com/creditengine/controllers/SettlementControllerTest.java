@@ -1084,7 +1084,7 @@ class SettlementControllerTest {
         )).thenReturn(statementPage);
 
         mockMvc.perform(get("/settlements/statement"))
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -1106,6 +1106,8 @@ class SettlementControllerTest {
 
     @Test
     void statement_ShouldReturnPaginatedResponseCorrectly() throws Exception {
+        LocalDate startDate = LocalDate.now().minusDays(30);
+        LocalDate endDate = LocalDate.now();
         Page<SettlementStatementResponse> page = new PageImpl<>(
                 Collections.emptyList(),
                 PageRequest.of(0, 10),
@@ -1113,13 +1115,17 @@ class SettlementControllerTest {
         );
 
         when(settlementService.statement(
-                eq(null), eq(null), eq(null), eq(null), any(Pageable.class)
+                eq(startDate), eq(endDate), eq(null), eq(null), any(Pageable.class)
         )).thenReturn(page);
 
-        mockMvc.perform(get("/settlements/statement"))
+        mockMvc.perform(get("/settlements/statement")
+                        .param("startDate", startDate.toString())
+                        .param("endDate", endDate.toString())
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.page").value(0))
+                .andExpect(jsonPath("$.number").value(0))
                 .andExpect(jsonPath("$.size").value(10))
                 .andExpect(jsonPath("$.totalElements").value(0))
                 .andExpect(jsonPath("$.totalPages").value(0))
@@ -1129,11 +1135,15 @@ class SettlementControllerTest {
 
     @Test
     void statement_ShouldReturnEmptyCollection_WhenNoResults() throws Exception {
+        LocalDate startDate = LocalDate.now().minusDays(30);
+        LocalDate endDate = LocalDate.now();
         when(settlementService.statement(
-                eq(null), eq(null), eq(null), eq(null), any(Pageable.class)
+                eq(startDate), eq(endDate), eq(null), eq(null), any(Pageable.class)
         )).thenReturn(statementPage);
 
-        mockMvc.perform(get("/settlements/statement"))
+        mockMvc.perform(get("/settlements/statement")
+                .param("startDate", startDate.toString())
+                .param("endDate", endDate.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content.length()").value(0));
