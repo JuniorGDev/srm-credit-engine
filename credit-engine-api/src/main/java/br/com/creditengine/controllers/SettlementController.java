@@ -13,10 +13,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -105,12 +107,16 @@ public class SettlementController {
             }
     )
     @GetMapping("/statement")
-    public ResponseEntity<PageResponse<SettlementStatementResponse>> statement(
+    public ResponseEntity<Page<SettlementStatementResponse>> statement(
 
-            @RequestParam(required = false)
+            @RequestParam
+            @NotNull(message = "Start date is required")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate startDate,
 
-            @RequestParam(required = false)
+            @RequestParam
+            @NotNull(message = "End date is required")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate endDate,
 
             @RequestParam(required = false)
@@ -119,23 +125,16 @@ public class SettlementController {
             @RequestParam(required = false)
             String currencyCode,
 
-            @PageableDefault(
-                    sort = "createdAt",
-                    direction = Sort.Direction.DESC
-            )
             Pageable pageable
     ) {
-        Page<SettlementStatementResponse> page =
+        return ResponseEntity.ok(
                 settlementService.statement(
                         startDate,
                         endDate,
                         sellerName,
                         currencyCode,
                         pageable
-                );
-
-        return ResponseEntity.ok(
-                PageResponse.from(page)
+                )
         );
     }
 }
