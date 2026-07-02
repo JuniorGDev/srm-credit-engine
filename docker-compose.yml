@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: credit-engine-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - credit-engine-network
+
+  app:
+    build:
+      context: ./credit-engine-api
+      dockerfile: Dockerfile
+    container_name: spring-credit-engine
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - credit-engine-network
+
+  web:
+    build:
+      context: ./credit-engine-web
+      dockerfile: Dockerfile
+    container_name: angular-credit-engine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "4200:80"
+    networks:
+      - credit-engine-network
+
+volumes:
+  postgres_data:
+
+networks:
+  credit-engine-network:
