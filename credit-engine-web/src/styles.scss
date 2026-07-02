@@ -1,1 +1,41 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  background: #f5f7fb;
+  color: #334155;
+}
+
+/* PrimeNG */
+
+.p-card {
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, .08);
+  padding: 1.5rem;
+}
+
+.p-card-body {
+  padding: 0px !important;
+}
+
+.p-button {
+  border-radius: 8px;
+}
+
+.p-inputtext,
+.p-select,
+.p-inputnumber,
+.p-datepicker {
+  width: 100%;
+}
