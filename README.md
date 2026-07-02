@@ -162,7 +162,7 @@ CREATE INDEX idx_settlement_payment_currency ON settlement (payment_currency_id)
 
 ```bash
 # Clone o repositório
-git clone <repository-url>
+git clone https://github.com/JuniorGDev/srm-credit-engine.git
 cd srm-credit-engine
 
 # Configure as variáveis de ambiente (exemplo no arquivo .env)
