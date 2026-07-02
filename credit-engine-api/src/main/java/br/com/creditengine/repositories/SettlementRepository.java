@@ -1,6 +1,6 @@
 package br.com.creditengine.repositories;
 
-import br.com.creditengine.SettlementStatementProjection;
+import br.com.creditengine.projections.SettlementStatementProjection;
 import br.com.creditengine.entities.Settlement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,14 +43,11 @@ public interface SettlementRepository extends JpaRepository<Settlement, Long> {
                     OR rc.code = :currencyCode
                     OR pc.code = :currencyCode)
             AND
-                (:startDate IS NULL
-                    OR s.created_at >= :startDate)
-            AND
-                (:endDate IS NULL
-                    OR s.created_at <= :endDate)
+                DATE(s.created_at) BETWEEN :startDate AND :endDate
             ORDER BY s.created_at DESC
             """,
-            nativeQuery = true)
+            nativeQuery = true
+    )
     Page<SettlementStatementProjection> findSettlementStatement(
             @Param("sellerName") String sellerName,
             @Param("currencyCode") String currencyCode,
