@@ -1,0 +1,39 @@
+aside {
+  width: 240px;
+  background: white;
+  border-right: 1px solid #e5e7eb;
+  height: 100%;
+  padding: 1rem;
+}
+
+a {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+
+  padding: .85rem 1rem;
+
+  border-radius: 8px;
+
+  color: #475569;
+
+  text-decoration: none;
+
+  transition: .2s;
+}
+
+a:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.active {
+  background: #2563eb;
+  color: white;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}

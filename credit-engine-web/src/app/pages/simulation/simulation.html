@@ -1,0 +1,125 @@
+<section class="page">
+  <h1>Nova Liquidação</h1>
+
+  <p class="subtitle">
+    Informe os dados do recebível para calcular o valor líquido da liquidação.
+  </p>
+
+  <p-card>
+    <form [formGroup]="form" (ngSubmit)="simulate()">
+      <div class="grid">
+        <div class="field">
+          <label>Cedente</label>
+          <input pInputText formControlName="sellerName" />
+        </div>
+        <div class="field">
+          <label>Tipo do Recebível</label>
+          <p-select formControlName="receivableType" optionLabel="label" optionValue="value" [options]="[
+                          {label:'Duplicata Mercantil',value:'DUPLICATA_MERCANTIL'},
+                          {label:'Cheque Pré-datado',value:'CHEQUE_PRE_DATADO'}
+                      ]" />
+        </div>
+        <div class="field">
+          <label>Valor Face</label>
+          <p-inputnumber mode="currency" currency="BRL" locale="pt-BR" formControlName="faceValue" />
+        </div>
+        <div class="field">
+          <label>Data de Vencimento</label>
+          <p-datepicker formControlName="dueDate" dateFormat="dd/mm/yy" />
+        </div>
+        <div class="field">
+          <label>Moeda do Recebível</label>
+          <p-select formControlName="currencyCode" optionLabel="code" optionValue="code" [options]="currencies()">
+          </p-select>
+        </div>
+        <div class="field">
+          <label>Moeda de Liquidação</label>
+          <p-select formControlName="paymentCurrencyCode" optionLabel="code" optionValue="code"
+            [options]="currencies()">
+          </p-select>
+        </div>
+        <div class="field">
+          <label>
+            Taxa de Câmbio
+          </label>
+          <input pInputText [value]="exchangeRate()?.rate ?? ''" readonly />
+        </div>
+      </div>
+      <div class="actions">
+        <button pButton type="submit" label="Simular" icon="pi pi-calculator" [loading]="loading()"
+          [disabled]="loading() || form.invalid">
+        </button>
+      </div>
+    </form>
+  </p-card>
+
+  @if(loading()) {
+  <p-card>
+    <p-skeleton height="180px">
+    </p-skeleton>
+  </p-card>
+  } @else if(result()) {
+  <p-card>
+
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <i class="pi pi-check-circle"></i>
+        <h3>Resultado da Simulação</h3>
+      </div>
+    </ng-template>
+
+    <div class="result-grid">
+
+      <div class="item">
+        <small>Valor Presente</small>
+        <strong>
+          {{ result()?.presentValue | currency: result()?.paymentCurrency }}
+        </strong>
+      </div>
+
+      <div class="item">
+        <small>Valor do Deságio</small>
+        <strong>
+          {{ result()?.discountValue | currency: result()?.paymentCurrency }}
+        </strong>
+      </div>
+
+      <div class="item">
+        <small>Valor Líquido</small>
+        <strong>
+          {{ result()?.paymentAmount | currency: result()?.paymentCurrency }}
+        </strong>
+      </div>
+
+      <div class="item">
+        <small>Moeda da Liquidação</small>
+        <strong>{{ result()?.paymentCurrency }}</strong>
+      </div>
+
+    </div>
+
+    <div class="result-actions">
+
+      <button pButton severity="secondary" label="Cancelar" (click)="result.set(null)">
+
+      </button>
+
+      <button pButton label="Confirmar Liquidação" icon="pi pi-check" (click)="confirmSettlement()">
+
+      </button>
+
+    </div>
+  </p-card>
+  } @else {
+  <div class="empty-result">
+    <i class="pi pi-calculator"></i>
+    <h3>
+      Nenhuma simulação realizada
+    </h3>
+    <p>
+      Preencha o formulário e clique em
+      <strong>Simular</strong>.
+    </p>
+  </div>
+  }
+</section>

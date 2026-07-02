@@ -1,0 +1,103 @@
+####################################################
+# Backend (Spring Boot / Maven)
+####################################################
+
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/HELP.md
+
+!backend/**/src/main/**/target/
+!backend/**/src/test/**/target/
+
+####################################################
+# Spring Tool Suite
+####################################################
+
+backend/.apt_generated
+backend/.classpath
+backend/.factorypath
+backend/.project
+backend/.settings/
+backend/.springBeans
+backend/.sts4-cache
+
+####################################################
+# IntelliJ IDEA
+####################################################
+
+.idea/
+*.iws
+*.iml
+*.ipr
+
+####################################################
+# NetBeans
+####################################################
+
+backend/nbproject/private/
+backend/nbbuild/
+backend/dist/
+backend/nbdist/
+backend/.nb-gradle/
+backend/build/
+
+!backend/**/src/main/**/build/
+!backend/**/src/test/**/build/
+
+####################################################
+# Frontend (Angular)
+####################################################
+
+credit-engine-web/node_modules/
+credit-engine-web/dist/
+credit-engine-web/.angular/
+credit-engine-web/out-tsc/
+credit-engine-web/tmp/
+credit-engine-web/bazel-out/
+credit-engine-web/coverage/
+credit-engine-web/.sass-cache/
+credit-engine-web/typings/
+credit-engine-web/__screenshots__/
+
+####################################################
+# Logs
+####################################################
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+####################################################
+# VS Code
+####################################################
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+####################################################
+# Eclipse
+####################################################
+
+.project
+.classpath
+.settings/
+
+####################################################
+# Misc
+####################################################
+
+.history/
+connect.lock
+libpeerconnection.log
+testem.log
+
+####################################################
+# Sistema Operacional
+####################################################
+
+.DS_Store
+Thumbs.db

@@ -1,0 +1,28 @@
+header {
+  height: 72px;
+  background: #0f172a;
+  color: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 2rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo i {
+  color: #38bdf8;
+  font-size: 2rem;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}

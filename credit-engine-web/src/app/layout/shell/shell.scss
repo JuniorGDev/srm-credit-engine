@@ -1,0 +1,24 @@
+.layout {
+  display: flex;
+  min-height: calc(100vh - 72px);
+}
+
+.content {
+  flex: 1;
+  padding: 2rem;
+  background: #f8fafc;
+}
+
+@media (max-width: 900px) {
+
+  .layout {
+    flex-direction: column;
+  }
+
+  aside {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+}
