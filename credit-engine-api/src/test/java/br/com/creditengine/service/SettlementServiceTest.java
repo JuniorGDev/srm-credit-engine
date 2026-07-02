@@ -1,6 +1,6 @@
 package br.com.creditengine.service;
 
-import br.com.creditengine.SettlementStatementProjection;
+import br.com.creditengine.projections.SettlementStatementProjection;
 import br.com.creditengine.calculators.PresentValueCalculator;
 import br.com.creditengine.calculators.SettlementCalculation;
 import br.com.creditengine.dtos.request.SettlementRequest;

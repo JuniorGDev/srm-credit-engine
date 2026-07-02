@@ -10,6 +10,7 @@ import br.com.creditengine.entities.Currency;
 import br.com.creditengine.entities.ExchangeRate;
 import br.com.creditengine.entities.Receivable;
 import br.com.creditengine.entities.Settlement;
+import br.com.creditengine.exceptions.InvalidSettlementException;
 import br.com.creditengine.exceptions.ResourceNotFoundException;
 import br.com.creditengine.repositories.CurrencyRepository;
 import br.com.creditengine.repositories.ExchangeRateRepository;
@@ -58,6 +59,11 @@ public class SettlementService {
             String currencyCode,
             Pageable pageable
     ){
+        if (endDate.isBefore(startDate)) {
+            throw new InvalidSettlementException(
+                    "End date cannot be earlier than start date."
+            );
+        }
         return settlementRepository.findSettlementStatement(sellerName, currencyCode, startDate, endDate, pageable).map(SettlementStatementResponse::from);
     }
 

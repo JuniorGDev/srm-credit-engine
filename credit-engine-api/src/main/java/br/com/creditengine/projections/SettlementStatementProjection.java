@@ -1,4 +1,4 @@
-package br.com.creditengine;
+package br.com.creditengine.projections;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

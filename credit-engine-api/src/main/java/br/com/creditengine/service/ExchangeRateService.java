@@ -33,6 +33,12 @@ public class ExchangeRateService {
         return ExchangeRateResponse.from(findExchangeRate(id));
     }
 
+    public ExchangeRateResponse findByFromCurrencyAndToCurrency(String fromCurrencyCode, String toCurrencyCode) {
+        var fromCurrency = findCurrency(fromCurrencyCode);
+        var toCurrency = findCurrency(toCurrencyCode);
+        return ExchangeRateResponse.from(exchangeRateRepository.findByFromCurrencyAndToCurrency(fromCurrency, toCurrency).orElseThrow(() -> new ResourceNotFoundException("Exchange rate", fromCurrencyCode + " to " + toCurrencyCode)));
+    }
+
     public ExchangeRateResponse save(ExchangeRateRequest exchangeRateRequest) {
         validateDifferentCurrencies(exchangeRateRequest.fromCurrency(), exchangeRateRequest.toCurrency());
         var fromCurrency = findCurrency(exchangeRateRequest.fromCurrency());
