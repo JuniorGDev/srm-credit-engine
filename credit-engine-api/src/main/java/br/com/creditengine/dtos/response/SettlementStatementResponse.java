@@ -1,6 +1,6 @@
 package br.com.creditengine.dtos.response;
 
-import br.com.creditengine.SettlementStatementProjection;
+import br.com.creditengine.projections.SettlementStatementProjection;
 import br.com.creditengine.enums.ReceivableType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
