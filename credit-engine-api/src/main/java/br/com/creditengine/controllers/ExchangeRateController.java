@@ -4,15 +4,19 @@ import br.com.creditengine.dtos.request.ExchangeRateRequest;
 import br.com.creditengine.dtos.request.ExchangeRateUpdateRequest;
 import br.com.creditengine.dtos.response.CurrencyResponse;
 import br.com.creditengine.dtos.response.ExchangeRateResponse;
+import br.com.creditengine.entities.Currency;
 import br.com.creditengine.service.ExchangeRateService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -75,6 +79,67 @@ public class ExchangeRateController {
     @GetMapping("/{id}")
     public ResponseEntity<ExchangeRateResponse> findById(@Positive @PathVariable Long id) {
         return ResponseEntity.ok(exchangeRateService.findById(id));
+    }
+
+    @Operation(
+            summary = "Find exchange rate by currencies",
+            description = "Returns the exchange rate for a given source and target currency.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Exchange rate found successfully",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ExchangeRateResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid currency codes"
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Exchange rate not found"
+                    )
+            }
+    )
+    @GetMapping("/search")
+    public ResponseEntity<ExchangeRateResponse> findByFromCurrencyAndToCurrency(
+            @Parameter(
+                    description = "Source currency code",
+                    example = "USD",
+                    required = true
+            )
+            @RequestParam
+            @NotBlank(message = "From currency code is required")
+            @Size(
+                    min = 3,
+                    max = 3,
+                    message = "From currency code must contain exactly 3 characters"
+            )
+            String fromCurrencyCode,
+
+            @Parameter(
+                    description = "Target currency code",
+                    example = "BRL",
+                    required = true
+            )
+            @RequestParam
+            @NotBlank(message = "To currency code is required")
+            @Size(
+                    min = 3,
+                    max = 3,
+                    message = "To currency code must contain exactly 3 characters"
+            )
+            String toCurrencyCode
+
+    ) {
+        return ResponseEntity.ok(
+                exchangeRateService.findByFromCurrencyAndToCurrency(
+                        fromCurrencyCode,
+                        toCurrencyCode
+                )
+        );
     }
 
     @Operation(
