@@ -382,19 +382,21 @@ class SettlementServiceTest {
     }
 
     @Test
-    void statement_ShouldReturnPageOfSettlementStatements_WhenFiltersAreNull() {
+    void statement_ShouldReturnPageOfSettlementStatements_WhenFiltersNotRequiredAreNull() {
         Pageable pageable = PageRequest.of(0, 10);
         Page<SettlementStatementProjection> settlementPage = new PageImpl<>(List.of());
+        LocalDate startDate = LocalDate.now().minusDays(30);
+        LocalDate endDate = LocalDate.now();
 
-        when(settlementRepository.findSettlementStatement(null, null, null, null, pageable))
+        when(settlementRepository.findSettlementStatement(null, null, startDate, endDate, pageable))
                 .thenReturn(settlementPage);
 
-        Page<?> response = settlementService.statement(null, null, null, null, pageable);
+        Page<?> response = settlementService.statement(startDate, endDate, null, null, pageable);
 
         assertNotNull(response);
         assertEquals(0, response.getContent().size());
 
-        verify(settlementRepository).findSettlementStatement(null, null, null, null, pageable);
+        verify(settlementRepository).findSettlementStatement(null, null, startDate, endDate, pageable);
     }
 
     @Test
